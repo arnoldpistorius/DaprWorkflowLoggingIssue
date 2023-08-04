@@ -1,0 +1,52 @@
+﻿version: '3'
+services:
+  console:
+    image: console
+    build:
+      context: .
+      dockerfile: Console/Dockerfile
+    ports:
+      - "5555:80"
+    depends_on:
+      - redis
+      - placement
+    networks:
+      - hello-dapr
+    environment:
+      - DAPR_HTTP_PORT=3500
+      - DAPR_GRPC_PORT=50001
+
+  console-dapr:
+    image: "daprio/daprd:edge"
+    command: [
+      "./daprd",
+      "--app-id", "testapp",
+      "--app-port", "80",
+      "--placement-host-address", "placement:50006", # Dapr's placement service can be reach via the docker DNS entry
+      "--resources-path", "./components",
+      "--dapr-grpc-port", "50001",
+      "--dapr-http-port", "3500"
+    ]
+    volumes:
+      - "./components/:/components" # Mount our components folder for the runtime to use. The mounted location must match the --resources-path argument.
+    depends_on:
+      - console
+    network_mode: "service:console"
+    
+  placement:
+    image: "daprio/dapr"
+    command: [ "./placement", "--port", "50006" ]
+    ports:
+      - "50006:50006"
+    networks:
+      - hello-dapr
+  
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
+    networks:
+      - hello-dapr
+
+networks:
+  hello-dapr: null

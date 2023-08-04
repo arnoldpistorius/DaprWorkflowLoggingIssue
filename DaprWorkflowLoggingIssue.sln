@@ -8,6 +8,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{106DEFFA-F19E-4142-91F4-801ABA7446FC}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", "{D7DF558E-C0DC-4CF7-A0A7-2151190C5CCF}"
+	ProjectSection(SolutionItems) = preProject
+		components\redis.yml = components\redis.yml
 	EndProjectSection
 EndProject
 Global
